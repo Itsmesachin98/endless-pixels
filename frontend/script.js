@@ -8,7 +8,8 @@ let photosArray = [];
 
 // Backend API endpoint
 const count = 5;
-const apiUrl = `http://localhost:5000/api/photos?count=${count}`;
+// const apiUrl = `http://localhost:5000/api/photos?count=${count}`;
+const apiUrl = `https://endless-pixels.onrender.com/api/photos?count=${count}`;
 
 // Check if all images were loaded
 const imageLoaded = () => {
