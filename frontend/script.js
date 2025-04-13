@@ -8,20 +8,23 @@ let photosArray = [];
 
 // Backend API endpoint
 const count = 5;
-// const apiUrl = `http://localhost:5000/api/photos?count=${count}`;
 const apiUrl = `https://endless-pixels.onrender.com/api/photos?count=${count}`;
 
-// Check if all images were loaded
-const imageLoaded = () => {
+// Increment the count of loaded images and check if all images are loaded.
+// If all images are loaded, set 'ready' to true and hide the loader.
+function imageLoaded() {
     imagesLoaded++;
     if (imagesLoaded === totalImages) {
         ready = true;
         loader.hidden = true;
     }
-};
+}
 
-// Create Elements For Links & Photos, Add to DOM
-const displayPhotos = () => {
+// Create and display photo elements dynamically on the page.
+// For each photo in the photosArray, create a link (<a>) and an image (<img>).
+// Set the appropriate attributes for the link and image, and add an event listener
+// to track when each image has finished loading. Append the created elements to the DOM.
+function displayPhotos() {
     imagesLoaded = 0;
     totalImages = photosArray.length;
     photosArray.forEach((photo) => {
@@ -39,28 +42,30 @@ const displayPhotos = () => {
         item.appendChild(img);
         imageContainer.appendChild(item);
     });
-};
+}
 
-// Get Photos From Backend
-const getPhotos = async () => {
+// Fetch photos from the backend API and update the photosArray.
+// Once the photos are fetched, call displayPhotos() to render them on the page.
+// If an error occurs during the fetch, log it to the console.
+async function getPhotos() {
     try {
         const response = await fetch(apiUrl);
-        console.log("This is response: ", response);
         photosArray = await response.json();
         displayPhotos();
     } catch (error) {
         console.error("Error fetching photos:", error);
     }
-};
+}
 
-// Scroll event listener
+// Listen for scroll events and check if the user is near the bottom of the page.
+// If the user is near the bottom and the app is ready, fetch and load more photos.
 window.addEventListener("scroll", () => {
     if (
         window.innerHeight + window.scrollY >=
             document.body.offsetHeight - 1000 &&
         ready
     ) {
-        ready = false;
+        ready = false; // Prevent multiple fetches until current photos are loaded
         getPhotos();
     }
 });
